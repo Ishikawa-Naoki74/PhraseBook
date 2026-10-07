@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PhraseBook
 
-## Getting Started
+YouTube で学ぶ、伝わる英語 — 保存した動画・フレーズを管理し、Gemini API で例文作成・言い換え・単語入れ替え練習ができるローカル専用アプリ。
 
-First, run the development server:
+## 構成
+
+- **Next.js 16** (App Router) — UI と API ルート
+- **Convex** (匿名ローカルデプロイメント) — データベース(videos / phrases)
+- **Gemini API** — AI 機能(例文作成・言い換え表現・単語の入れ替え)
+
+## 起動方法
+
+ターミナルを 2 つ使います:
 
 ```bash
+# ターミナル1: Convex(データベース)
+npx convex dev
+
+# ターミナル2: Next.js
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+http://localhost:3000 を開く。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Gemini API キーの設定(AI機能に必要)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. [Google AI Studio](https://aistudio.google.com/apikey) で API キーを取得
+2. `.env.local` の `GEMINI_API_KEY=` にキーを設定
+3. `npm run dev` を再起動
 
-## Learn More
+モデルは `GEMINI_MODEL` で変更可能(既定: `gemini-2.5-flash`)。
 
-To learn more about Next.js, take a look at the following resources:
+## 機能
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **動画一覧**: YouTube URL を貼るとタイトル・チャンネル名・サムネイルを自動取得(oEmbed)
+- **フレーズ管理**: 動画ごとにフレーズ / 単語 / メモを保存、スター付け
+- **AI機能**(各フレーズカードのボタン、または「AI活用」ページ):
+  - AIで例文を作成 — 場面の異なる例文を3つ生成
+  - 言い換え表現 — ニュアンス解説付きの言い換えを提案
+  - 単語を入れ替えてみる — 重要単語の置き換え候補をクリックして練習
+  - 生成結果は「+ フレーズとして保存」でそのまま保存可能
+- **学習記録**: 保存状況のサマリー
+- **検索**: ヘッダーの検索ボックス(⌘K)で動画・フレーズを絞り込み
